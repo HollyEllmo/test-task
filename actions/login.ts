@@ -28,6 +28,8 @@ export const login = async (
 
   const existingUser = await getUserByEmail(email);
 
+  console.log(existingUser);
+
   if (!existingUser || !existingUser.password) {
     return { error: "Invalid credentials!" };
   }
