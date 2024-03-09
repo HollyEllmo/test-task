@@ -38,18 +38,38 @@ model User {
 model News {
   id          String   @id @default(cuid())
   title       String
-  cover       String
   description String
   fullText    String
   status      NewsStatus
+  createdAt   DateTime @default(now())
   authorId    String
   author      User     @relation(fields: [authorId], references: [id])
+  fileKey     String?  @unique 
+  file        File?    @relation(fields: [fileKey], references: [key]) 
 }
 
 enum NewsStatus {
   PUBLISHED
   DRAFT
   ARCHIVED
+}
+
+enum UploadStatus {
+  PENDING
+  PROCESSING
+  FAILED
+  SUCCESS
+}
+
+model File {
+  id           String    @id @default(cuid())
+  name         String
+  uploadStatus UploadStatus @default(PENDING) 
+  url          String
+  key          String    @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  news         News?   
 }
 
 model Account {

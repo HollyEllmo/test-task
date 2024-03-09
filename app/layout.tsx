@@ -6,6 +6,8 @@ import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import { cn } from "@/lib/utils";
+import ReactQueryProvider from "@/components/Providers";
+import { FileResponseProvider } from "@/components/FileContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,13 +26,18 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body
-          className={cn("min-h-screen font-sans antialiased", inter.className)}
-        >
-          <Toaster />
-          <Navbar />
-          {children}
-        </body>
+        <ReactQueryProvider>
+          <body
+            className={cn(
+              "min-h-screen font-sans antialiased",
+              inter.className
+            )}
+          >
+            <Toaster />
+            <Navbar />
+            {children}
+          </body>
+        </ReactQueryProvider>
       </html>
     </SessionProvider>
   );

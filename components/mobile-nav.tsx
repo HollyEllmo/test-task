@@ -57,25 +57,16 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                   </Link>
                 </li>
                 <li className="my-3 h-px w-full bg-gray-300" />
-                <li>
-                  <Link
-                    onClick={() => closeOnCurrent("/pricing")}
-                    href="/pricing"
-                    className="flex items-center w-full font-semibold"
-                  >
-                    Pricing
-                  </Link>
-                </li>
               </>
             ) : (
               <>
                 <li>
                   <Link
                     onClick={() => closeOnCurrent("/dashboard")}
-                    href="/dashboard"
+                    href="/news"
                     className="flex items-center w-full font-semibold"
                   >
-                    Dashboard
+                    News
                   </Link>
                 </li>
                 <li className="my-3 h-px w-full bg-gray-300" />
@@ -92,10 +83,10 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                 <li>
                   <Link
                     onClick={() => closeOnCurrent("/pricing")}
-                    href="/pricing"
+                    href="/createNews"
                     className="flex items-center w-full font-semibold"
                   >
-                    Pricing
+                    Create News
                   </Link>
                 </li>
                 <li className="my-3 h-px w-full bg-gray-300" />

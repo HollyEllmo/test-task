@@ -30,7 +30,7 @@ const Navbar = () => {
               {user && (
                 <Button
                   asChild
-                  variant={pathname === "/dashboard" ? "default" : "outline"}
+                  variant={pathname === "/settings" ? "default" : "outline"}
                 >
                   <Link href="/settings">Settings</Link>
                 </Button>
@@ -39,11 +39,20 @@ const Navbar = () => {
               {user && (
                 <Button
                   asChild
-                  variant={pathname === "/dashboard" ? "default" : "outline"}
+                  variant={pathname === "/news" ? "default" : "outline"}
                 >
                   <Link href="/news">News</Link>
                 </Button>
               )}
+              {user?.role === "ADMIN" ||
+                (user?.role === "MODERATOR" && (
+                  <Button
+                    asChild
+                    variant={pathname === "/createNews" ? "default" : "outline"}
+                  >
+                    <Link href="/createNews">Create News</Link>
+                  </Button>
+                ))}
               {user && <UserButton />}
               {!user && (
                 <LoginButton asChild>

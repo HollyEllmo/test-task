@@ -74,3 +74,22 @@ export const RegisterSchema = z.object({
     message: "Name is required",
   }),
 });
+
+export const NewsSchema = z.object({
+  title: z.string({
+    required_error: "Title is required",
+  }),
+  description: z.string({
+    required_error: "Description is required",
+  }),
+  fullText: z.string({
+    required_error: "Full text is required",
+  }),
+  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"], {
+    required_error: "Status is required",
+  }),
+  authorId: z.string({
+    required_error: "Author ID is required",
+  }),
+  fileKey: z.string().optional(),
+});
