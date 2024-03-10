@@ -91,7 +91,7 @@ const SettingsPage = () => {
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="Aziz Navruzov"
+                        placeholder="Vasya"
                         disabled={isPending}
                       />
                     </FormControl>
@@ -110,7 +110,7 @@ const SettingsPage = () => {
                         <FormControl>
                           <Input
                             {...field}
-                            placeholder="aziz.akya@example.com"
+                            placeholder="vasya.ivanov@example.com"
                             type="email"
                             disabled={isPending}
                           />

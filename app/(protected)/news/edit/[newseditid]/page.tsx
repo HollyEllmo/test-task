@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition, useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { EditNewsSchema, NewsSchema } from "@/schemas";
+
+import { EditNewsSchema } from "@/schemas";
 import {
   Select,
   SelectContent,
@@ -37,13 +37,12 @@ import { useFileResponse } from "@/components/FileContext";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const CreateNewsPage = () => {
   const user = useCurrentUser();
   const router = useRouter();
-  if (!user || user?.role === "USER") redirect("/news");
+  if (!user || user?.role === "USER") redirect("/");
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
   const [newsItem, setNewsItem] = useState({
@@ -65,7 +64,6 @@ const CreateNewsPage = () => {
     },
   });
 
-  const { update } = useSession();
   const [isPending, startTransition] = useTransition();
   const [imageUrl, setImageUrl] = useState<string | undefined>();
 
@@ -184,7 +182,7 @@ const CreateNewsPage = () => {
         if (response.ok) {
           if (response.status === 200) {
             form.reset();
-            update();
+
             setSuccess("News Edited!");
           }
 

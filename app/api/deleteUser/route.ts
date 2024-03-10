@@ -4,10 +4,9 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const user = await currentUser();
+  const thisUser = await currentUser();
 
-  // Проверяем, авторизован ли пользователь
-  if (!user || user?.role === "USER") {
+  if (!thisUser || thisUser?.role !== "ADMIN") {
     return NextResponse.json({ error: "Not Allowed action!" }, { status: 401 });
   }
 
@@ -17,25 +16,25 @@ export async function POST(req: Request) {
     // Проверяем наличие id новости
     if (!id) {
       return NextResponse.json(
-        { error: "News ID is required!" },
+        { error: "User ID is required!" },
         { status: 400 }
       );
     }
 
-    const newsItem = await db.news.findUnique({
+    const user = await db.user.findUnique({
       where: { id },
     });
 
-    if (!newsItem) {
-      return NextResponse.json({ error: "News not found!" }, { status: 404 });
+    if (!user) {
+      return NextResponse.json({ error: "User not found!" }, { status: 404 });
     }
 
-    await db.news.delete({
+    await db.user.delete({
       where: { id },
     });
 
     return NextResponse.json(
-      { message: "News Deleted Successfully" },
+      { message: "User Deleted Successfully" },
       { status: 200 }
     );
   } catch (error) {

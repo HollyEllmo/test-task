@@ -53,6 +53,22 @@ const Navbar = () => {
                   <Link href="/createNews">Create News</Link>
                 </Button>
               )}
+              {user?.role === "ADMIN" && (
+                <Button
+                  asChild
+                  variant={pathname === "/createUser" ? "default" : "outline"}
+                >
+                  <Link href="/createUser">Create User</Link>
+                </Button>
+              )}
+              {user?.role === "ADMIN" && (
+                <Button
+                  asChild
+                  variant={pathname === "/users" ? "default" : "outline"}
+                >
+                  <Link href="/users">Users</Link>
+                </Button>
+              )}
 
               {user && <UserButton />}
               {!user && (

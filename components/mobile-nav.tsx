@@ -6,11 +6,14 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LogoutButton } from "./auth/logout-button";
 import { Button } from "./ui/button";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleOpen = () => setIsOpen((prev) => !prev);
+
+  const user = useCurrentUser();
 
   const pathname = usePathname();
 
@@ -80,15 +83,41 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                   </Link>
                 </li>
                 <li className="my-3 h-px w-full bg-gray-300" />
-                <li>
-                  <Link
-                    onClick={() => closeOnCurrent("/pricing")}
-                    href="/createNews"
-                    className="flex items-center w-full font-semibold"
-                  >
-                    Create News
-                  </Link>
-                </li>
+                {user?.role !== "USER" && (
+                  <li>
+                    <Link
+                      onClick={() => closeOnCurrent("/createNews")}
+                      href="/createNews"
+                      className="flex items-center w-full font-semibold"
+                    >
+                      Create News
+                    </Link>
+                  </li>
+                )}
+                <li className="my-3 h-px w-full bg-gray-300" />
+                {user?.role === "ADMIN" && (
+                  <li>
+                    <Link
+                      onClick={() => closeOnCurrent("/users")}
+                      href="/users"
+                      className="flex items-center w-full font-semibold"
+                    >
+                      Users
+                    </Link>
+                  </li>
+                )}
+                <li className="my-3 h-px w-full bg-gray-300" />
+                {user?.role === "ADMIN" && (
+                  <li>
+                    <Link
+                      onClick={() => closeOnCurrent("/createUser")}
+                      href="/createUser"
+                      className="flex items-center w-full font-semibold"
+                    >
+                      Create User
+                    </Link>
+                  </li>
+                )}
                 <li className="my-3 h-px w-full bg-gray-300" />
                 <li>
                   <LogoutButton>

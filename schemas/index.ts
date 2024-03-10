@@ -1,4 +1,7 @@
 import { UserRole } from "@prisma/client";
+import { UserStatus } from "@prisma/client";
+import { NewsStatus } from "@prisma/client";
+
 import * as z from "zod";
 
 export const SettingsSchema = z
@@ -9,6 +12,7 @@ export const SettingsSchema = z
     email: z.optional(z.string().email()),
     password: z.optional(z.string().min(6)),
     newPassword: z.optional(z.string().min(6)),
+    phoneNumber: z.optional(z.string().min(7)),
   })
   .refine(
     (data) => {
@@ -36,7 +40,26 @@ export const SettingsSchema = z
     }
   );
 
-// Make this optional if problems with form submition
+export const CreateUserSchema = z.object({
+  name: z.optional(z.string()),
+  isTwoFactorEnabled: z.optional(z.boolean()),
+  role: z.enum([UserRole.ADMIN, UserRole.USER, UserRole.MODERATOR]),
+  email: z.optional(z.string().email()),
+  password: z.optional(z.string().min(6)),
+  phoneNumber: z.optional(z.string().min(7)),
+  status: z.enum([UserStatus.ACTIVE, UserStatus.BANNED]),
+});
+
+export const UpdateUserSchema = z.object({
+  id: z.string(),
+  name: z.optional(z.string()),
+  isTwoFactorEnabled: z.optional(z.boolean()),
+  role: z.enum([UserRole.ADMIN, UserRole.USER, UserRole.MODERATOR]),
+  email: z.optional(z.string().email()),
+  password: z.optional(z.string().min(6)),
+  phoneNumber: z.optional(z.string().min(7)),
+  status: z.enum([UserStatus.ACTIVE, UserStatus.BANNED]),
+});
 
 export const NewPasswordSchema = z.object({
   password: z.string().min(6, {
@@ -85,9 +108,12 @@ export const NewsSchema = z.object({
   fullText: z.string({
     required_error: "Full text is required",
   }),
-  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"], {
-    required_error: "Status is required",
-  }),
+  status: z.enum(
+    [NewsStatus.ARCHIVED, NewsStatus.PUBLISHED, NewsStatus.DRAFT],
+    {
+      required_error: "Status is required",
+    }
+  ),
   authorId: z.string({
     required_error: "Author ID is required",
   }),
@@ -107,9 +133,12 @@ export const EditNewsSchema = z.object({
   fullText: z.string({
     required_error: "Full text is required",
   }),
-  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"], {
-    required_error: "Status is required",
-  }),
+  status: z.enum(
+    [NewsStatus.ARCHIVED, NewsStatus.PUBLISHED, NewsStatus.DRAFT],
+    {
+      required_error: "Status is required",
+    }
+  ),
   authorId: z.string({
     required_error: "Author ID is required",
   }),
