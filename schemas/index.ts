@@ -1,4 +1,3 @@
-// @ts-ignore
 import { UserRole } from "@prisma/client";
 import { UserStatus } from "@prisma/client";
 import { NewsStatus } from "@prisma/client";

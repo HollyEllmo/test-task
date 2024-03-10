@@ -33,7 +33,6 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 
-// @ts-ignore
 import { UserRole } from "@prisma/client";
 import { redirect, usePathname } from "next/navigation";
 import axios from "axios";

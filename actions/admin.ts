@@ -2,7 +2,6 @@
 
 import { currentRole } from "@/lib/auth";
 
-// @ts-ignore
 import { UserRole } from "@prisma/client";
 
 export const admin = async () => {

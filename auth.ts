@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-// @ts-ignore
+
 import { UserRole } from "@prisma/client";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
