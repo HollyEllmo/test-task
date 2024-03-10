@@ -195,7 +195,7 @@ const SettingsPage = () => {
                         <SelectItem value={UserRole.ADMIN}>Admin</SelectItem>
                         <SelectItem value={UserRole.USER}>User</SelectItem>
                         <SelectItem value={UserRole.MODERATOR}>
-                          Moderaor
+                          Moderator
                         </SelectItem>
                       </SelectContent>
                     </Select>

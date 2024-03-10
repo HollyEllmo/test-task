@@ -20,20 +20,14 @@ export default function Home() {
         >
           👀
         </h1>
+
         <div className="flex flex-col">
-          <p className="text-white text-lg">
-            Hello, this is test task for Vadim Galkin.
+          <p className="text-3xl font-bold mt-10 text-center sm:mt-4 text-zinc-700">
+            Hello, this is a test task for Vadim Galkin
           </p>
-          <p className="font-bold text-white text-lg">
-            Please log in to view further!
+          <p className="text-xl mt-5 text-center sm:mt-2 text-zinc-600">
+            Please sign in if you have not already done so
           </p>
-        </div>
-        <div>
-          <LoginButton asChild>
-            <Button variant="secondary" size="lg">
-              Sign in
-            </Button>
-          </LoginButton>
         </div>
       </div>
     </main>

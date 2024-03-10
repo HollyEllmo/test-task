@@ -13,22 +13,23 @@ export async function POST(req: Request) {
       );
     }
 
-    const { title, description, fullText, status, fileKey } = await req.json();
+    const { id, title, description, fullText, status, authorId, fileKey } =
+      await req.json();
 
-    console.log(title, description, fullText, status, user.id, fileKey);
+    console.log(id, title, description, fullText, status, authorId, fileKey);
 
-    const newNews = await db.news.create({
+    const updatedNews = await db.news.update({
+      where: { id },
       data: {
         title,
         description,
         fullText,
         status,
-        authorId: user.id,
         fileKey,
       },
     });
 
-    return NextResponse.json({ newNews }, { status: 200 });
+    return NextResponse.json({ updatedNews }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Something went wrong!" },

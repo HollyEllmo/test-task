@@ -25,7 +25,7 @@ export const ourFileRouter = {
           uploadStatus: "SUCCESS",
         },
       });
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
+
       return { imageUrl: file.url };
     }),
 } satisfies FileRouter;

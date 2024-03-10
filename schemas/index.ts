@@ -93,3 +93,25 @@ export const NewsSchema = z.object({
   }),
   fileKey: z.string().optional(),
 });
+
+export const EditNewsSchema = z.object({
+  id: z.string({
+    required_error: "ID is required",
+  }),
+  title: z.string({
+    required_error: "Title is required",
+  }),
+  description: z.string({
+    required_error: "Description is required",
+  }),
+  fullText: z.string({
+    required_error: "Full text is required",
+  }),
+  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"], {
+    required_error: "Status is required",
+  }),
+  authorId: z.string({
+    required_error: "Author ID is required",
+  }),
+  fileKey: z.string().optional(),
+});

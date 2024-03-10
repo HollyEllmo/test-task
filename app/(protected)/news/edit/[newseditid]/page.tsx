@@ -1,11 +1,12 @@
 "use client";
 
 import * as z from "zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition, useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { NewsSchema } from "@/schemas";
+import { EditNewsSchema, NewsSchema } from "@/schemas";
 import {
   Select,
   SelectContent,
@@ -34,22 +35,56 @@ import { redirect } from "next/navigation";
 import UploadButton from "@/components/upload-button";
 import { useFileResponse } from "@/components/FileContext";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useToast } from "@/components/ui/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const CreateNewsPage = () => {
   const user = useCurrentUser();
   const router = useRouter();
-  if (!user || user?.role === "USER") redirect("/");
+  if (!user || user?.role === "USER") redirect("/news");
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
+  const [newsItem, setNewsItem] = useState({
+    id: "",
+    title: "",
+    description: "",
+    fullText: "",
+    status: undefined,
+    authorId: "",
+    fileKey: "",
+    file: {
+      createdAt: "",
+      updatedAt: "",
+      id: "",
+      name: "",
+      key: "",
+      url: "",
+      uploadStatus: "",
+    },
+  });
+
   const { update } = useSession();
   const [isPending, startTransition] = useTransition();
   const [imageUrl, setImageUrl] = useState<string | undefined>();
 
   const { fileResponse } = useFileResponse();
 
-  const form = useForm<z.infer<typeof NewsSchema>>({
-    resolver: zodResolver(NewsSchema),
+  function removePrefix(path: string) {
+    const prefix = "/news/edit/";
+    return path.replace(prefix, "");
+  }
+
+  const { id, title, description, fullText, status, authorId, fileKey } =
+    newsItem;
+
+  console.log(title, description, fullText, status, authorId, fileKey);
+
+  const fileUrl = newsItem.file.url;
+
+  const form = useForm<z.infer<typeof EditNewsSchema>>({
+    resolver: zodResolver(EditNewsSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -57,6 +92,7 @@ const CreateNewsPage = () => {
       status: "DRAFT",
       authorId: "",
       fileKey: "",
+      id: "",
     },
   });
 
@@ -69,11 +105,71 @@ const CreateNewsPage = () => {
     }
   }, [fileResponse, setValue]);
 
+  useEffect(() => {
+    if (
+      title &&
+      description &&
+      fullText &&
+      status &&
+      fileKey &&
+      fileUrl &&
+      authorId
+    ) {
+      setValue("title", title);
+      setValue("description", description);
+      setValue("fullText", fullText);
+      setValue("status", status);
+      setValue("fileKey", fileKey);
+      setValue("id", id);
+      setValue("authorId", authorId);
+      setImageUrl(fileUrl);
+    }
+  }, [
+    description,
+    fileKey,
+    fileUrl,
+    fullText,
+    setValue,
+    status,
+    title,
+    id,
+    authorId,
+  ]);
+
+  const pathname = usePathname();
+
+  const NewsId = removePrefix(pathname);
+
+  console.log(NewsId);
+
+  useEffect(() => {
+    const fetchNewsItem = async () => {
+      if (NewsId) {
+        try {
+          const response = await axios.post("/api/getNewsItem", {
+            id: NewsId,
+          });
+          setNewsItem(response.data.newsItem);
+        } catch (error) {
+          console.error("Error while searching for news:", error);
+        }
+      }
+    };
+
+    fetchNewsItem();
+  }, [NewsId]);
+
+  console.log(newsItem);
+
   const { mutate: sendFormValues } = useMutation({
-    mutationFn: async ({ values }: { values: z.infer<typeof NewsSchema> }) => {
+    mutationFn: async ({
+      values,
+    }: {
+      values: z.infer<typeof EditNewsSchema>;
+    }) => {
       try {
         console.log(values);
-        const response = await fetch("/api/createNews", {
+        const response = await fetch("/api/updateNews", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -83,15 +179,13 @@ const CreateNewsPage = () => {
 
         const data = await response.json();
 
-        router.push(`news/${data.newNews.id}`);
-
-        console.log(data.newNews.id);
+        router.push(`news/${data.updatedNews.id}`);
 
         if (response.ok) {
           if (response.status === 200) {
             form.reset();
             update();
-            setSuccess("News Published!");
+            setSuccess("News Edited!");
           }
 
           if (data?.error) {
@@ -103,14 +197,13 @@ const CreateNewsPage = () => {
           setError(data.error || "Something went wrong");
         }
       } catch (error) {
-        // Обработка исключения в случае ошибки сети или другой JS ошибки
         form.reset();
         setError("Network error or something went wrong");
       }
     },
   });
 
-  const onSubmit = (values: z.infer<typeof NewsSchema>) => {
+  const onSubmit = (values: z.infer<typeof EditNewsSchema>) => {
     startTransition(() => {
       setError(undefined);
       setSuccess(undefined);
@@ -119,10 +212,14 @@ const CreateNewsPage = () => {
     });
   };
 
+  if (!id) {
+    return <Skeleton className="w-[375px] sm:w-[600px] h-full" />;
+  }
+
   return (
     <Card className="w-[375px] sm:w-[600px] h-full sm:h-auto">
       <CardHeader>
-        <p className="text-2xl font-semibold text-center">📰 Create News</p>
+        <p className="text-2xl font-semibold text-center">📝 Edit News</p>
       </CardHeader>
       <CardContent>
         <div className="py-7 flex flex-col-reverse sm:flex-row items-center justify-center gap-10">
@@ -171,6 +268,30 @@ const CreateNewsPage = () => {
               <FormField
                 control={form.control}
                 name="fileKey"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} disabled={isPending} type="hidden" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="authorId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} disabled={isPending} type="hidden" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="id"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>

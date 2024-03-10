@@ -44,15 +44,16 @@ const Navbar = () => {
                   <Link href="/news">News</Link>
                 </Button>
               )}
-              {user?.role === "ADMIN" ||
-                (user?.role === "MODERATOR" && (
-                  <Button
-                    asChild
-                    variant={pathname === "/createNews" ? "default" : "outline"}
-                  >
-                    <Link href="/createNews">Create News</Link>
-                  </Button>
-                ))}
+
+              {user?.role !== "USER" && (
+                <Button
+                  asChild
+                  variant={pathname === "/createNews" ? "default" : "outline"}
+                >
+                  <Link href="/createNews">Create News</Link>
+                </Button>
+              )}
+
               {user && <UserButton />}
               {!user && (
                 <LoginButton asChild>
