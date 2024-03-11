@@ -11,3 +11,6 @@ All .env variables already, but you need to deploy your own PostgreSQL in Docker
 
 I hope you won't abuse my keys :)
 
+Probably soon I will deploy this thing on my VPS and attach a link here, but definitely not today.
+
+But in general, welcome, I hope my weird code doesn’t scare you too much, I haven’t slept much in recent days))
