@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CreateUserSchema, UpdateUserSchema } from "@/schemas";
+import { CreateUserSchema } from "@/schemas";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -32,10 +32,8 @@ import { Input } from "@/components/ui/input";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-
-// import { UserRole } from "@prisma/client";
+import { UserRole } from "@prisma/client";
 import { redirect, usePathname } from "next/navigation";
-import axios from "axios";
 
 const SettingsPage = () => {
   const currentUser = useCurrentUser();
@@ -48,7 +46,6 @@ const SettingsPage = () => {
   const { update } = useSession();
   const [isPending, startTransition] = useTransition();
   const [user, setUser] = useState({
-    id: "",
     password: "",
     name: "",
     email: "",
@@ -64,7 +61,6 @@ const SettingsPage = () => {
   }
 
   const {
-    id,
     password,
     name,
     email,
@@ -75,7 +71,6 @@ const SettingsPage = () => {
   } = user;
 
   console.log(
-    id,
     password,
     name,
     email,
@@ -85,14 +80,14 @@ const SettingsPage = () => {
     isTwoFactorEnabled
   );
 
-  const form = useForm<z.infer<typeof UpdateUserSchema>>({
-    resolver: zodResolver(UpdateUserSchema),
+  const form = useForm<z.infer<typeof CreateUserSchema>>({
+    resolver: zodResolver(CreateUserSchema),
     defaultValues: {
       password: "",
       name: "",
       email: "",
       phoneNumber: "",
-      role: "USER",
+      role: UserRole.USER,
       status: UserStatus.ACTIVE,
       isTwoFactorEnabled: false,
     },
@@ -101,16 +96,24 @@ const SettingsPage = () => {
   const { setValue } = form;
 
   useEffect(() => {
-    if (name && email && phoneNumber && role && status) {
-      setValue("id", id);
+    if (
+      password &&
+      name &&
+      email &&
+      phoneNumber &&
+      role &&
+      status &&
+      isTwoFactorEnabled
+    ) {
+      setValue("password", password);
       setValue("name", name);
       setValue("email", email);
       setValue("phoneNumber", phoneNumber);
       setValue("role", role);
       setValue("status", status);
+      setValue("isTwoFactorEnabled", isTwoFactorEnabled);
     }
   }, [
-    id,
     password,
     name,
     email,
@@ -127,33 +130,14 @@ const SettingsPage = () => {
 
   console.log(UserId);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (UserId) {
-        try {
-          const response = await axios.post("/api/getUser", {
-            id: UserId,
-          });
-          setUser(response.data.user);
-        } catch (error) {
-          console.error("Error while searching for news:", error);
-        }
-      }
-    };
-
-    fetchUser();
-  }, [UserId]);
-
-  console.log(UserId);
-
-  const { mutate: updateUser } = useMutation({
+  const { mutate: createUser } = useMutation({
     mutationFn: async ({
       values,
     }: {
       values: z.infer<typeof CreateUserSchema>;
     }) => {
       try {
-        const response = await fetch("/api/updateUser", {
+        const response = await fetch("/api/createUser", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -169,7 +153,8 @@ const SettingsPage = () => {
           if (response.status === 200) {
             form.reset();
             update();
-            setSuccess("User Updated!");
+            console.log("User Created!");
+            setSuccess("User Created!");
           }
 
           if (data?.error) {
@@ -191,14 +176,14 @@ const SettingsPage = () => {
     startTransition(() => {
       setError(undefined);
       setSuccess(undefined);
-      updateUser({ values });
+      createUser({ values });
     });
   };
 
   return (
     <Card className="w-[375px] sm:w-[600px] h-screen sm:h-auto">
       <CardHeader>
-        <p className="text-2xl font-semibold text-center">👷‍♂️ Update User</p>
+        <p className="text-2xl font-semibold text-center">🧑 Create User</p>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -216,19 +201,6 @@ const SettingsPage = () => {
                         placeholder="Vasya"
                         disabled={isPending}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="hidden" disabled={isPending} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -326,9 +298,11 @@ const SettingsPage = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value={"ADMIN"}>Admin</SelectItem>
-                        <SelectItem value={"USER"}>User</SelectItem>
-                        <SelectItem value={"MODERATOR"}>Moderator</SelectItem>
+                        <SelectItem value={UserRole.ADMIN}>Admin</SelectItem>
+                        <SelectItem value={UserRole.USER}>User</SelectItem>
+                        <SelectItem value={UserRole.MODERATOR}>
+                          Moderator
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -368,7 +342,7 @@ const SettingsPage = () => {
             <FormError message={error} />
             <FormSuccess message={success} />
             <Button disabled={isPending} type="submit">
-              Update User
+              Create User
             </Button>
           </form>
         </Form>
