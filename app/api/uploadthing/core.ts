@@ -16,7 +16,6 @@ export const ourFileRouter = {
       return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log(file);
       const createdFile = await db.file.create({
         data: {
           key: file.key,

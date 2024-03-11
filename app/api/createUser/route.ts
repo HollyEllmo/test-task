@@ -26,16 +26,6 @@ export async function POST(req: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    console.log(
-      hashedPassword,
-      name,
-      email,
-      phoneNumber,
-      role,
-      status,
-      isTwoFactorEnabled
-    );
-
     const newUser = await db.user.create({
       data: {
         password: hashedPassword,
@@ -48,8 +38,6 @@ export async function POST(req: Request) {
         emailVerified: new Date(),
       },
     });
-
-    console.log(newUser);
 
     return NextResponse.json({ message: "User Created!" }, { status: 200 });
   } catch (error) {

@@ -27,7 +27,7 @@ const UsersPage = () => {
     const fetchNews = async () => {
       try {
         const response = await axios.get("/api/getUsers");
-        console.log(response.data);
+
         setUsers(response.data.users);
       } catch (error) {
         console.error("Error receiving users:", error);
@@ -37,12 +37,9 @@ const UsersPage = () => {
     fetchNews();
   }, [revalidate]);
 
-  console.log(users);
-
   const { mutate: deleteUser } = useMutation({
     mutationFn: async ({ id }: { id: string }) => {
       try {
-        console.log(id);
         const response = await fetch("/api/deleteUser", {
           method: "POST",
           headers: {

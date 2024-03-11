@@ -15,8 +15,6 @@ export async function POST(req: Request) {
 
     const { title, description, fullText, status, fileKey } = await req.json();
 
-    console.log(title, description, fullText, status, user.id, fileKey);
-
     const newNews = await db.news.create({
       data: {
         title,

@@ -70,16 +70,6 @@ const SettingsPage = () => {
     isTwoFactorEnabled,
   } = user;
 
-  console.log(
-    password,
-    name,
-    email,
-    phoneNumber,
-    role,
-    status,
-    isTwoFactorEnabled
-  );
-
   const form = useForm<z.infer<typeof CreateUserSchema>>({
     resolver: zodResolver(CreateUserSchema),
     defaultValues: {
@@ -128,8 +118,6 @@ const SettingsPage = () => {
 
   const UserId = removePrefix(pathname);
 
-  console.log(UserId);
-
   const { mutate: createUser } = useMutation({
     mutationFn: async ({
       values,
@@ -146,8 +134,6 @@ const SettingsPage = () => {
         });
 
         const data = await response.json();
-
-        console.log(data);
 
         if (response.ok) {
           if (response.status === 200) {

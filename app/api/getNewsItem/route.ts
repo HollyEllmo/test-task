@@ -33,8 +33,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "News not found!" }, { status: 404 });
     }
 
-    console.log(newsItem);
-
     return NextResponse.json({ newsItem }, { status: 200 });
   } catch (error) {
     console.error(error);

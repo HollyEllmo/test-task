@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     const { id, title, description, fullText, status, authorId, fileKey } =
       await req.json();
 
-    console.log(id, title, description, fullText, status, authorId, fileKey);
+   
 
     const updatedNews = await db.news.update({
       where: { id },

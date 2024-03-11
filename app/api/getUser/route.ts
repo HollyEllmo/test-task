@@ -28,8 +28,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found!" }, { status: 404 });
     }
 
-    console.log(user);
-
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
     console.error(error);

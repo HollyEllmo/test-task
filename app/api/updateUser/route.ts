@@ -17,8 +17,6 @@ export async function POST(req: Request) {
 
     const id = values.id;
 
-    console.log(id);
-
     const updatedUser = await db.user.update({
       where: { id },
       data: {

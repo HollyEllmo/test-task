@@ -50,8 +50,6 @@ const UploadDropzone: React.FC<UploadDropzoneProps> = ({ onClose }) => {
         // handle file uploading
         const res = await startUpload(acceptedFile);
 
-        console.log(res);
-
         if (!res) {
           return toast({
             title: "Too large Image",
@@ -62,13 +60,9 @@ const UploadDropzone: React.FC<UploadDropzoneProps> = ({ onClose }) => {
 
         const [fileResponse] = res;
 
-        console.log(fileResponse);
-
         updateFileResponse(fileResponse);
 
         const key = fileResponse?.key;
-
-        console.log(key);
 
         if (!key) {
           return toast({

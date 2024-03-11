@@ -77,8 +77,6 @@ const CreateNewsPage = () => {
   const { id, title, description, fullText, status, authorId, fileKey } =
     newsItem;
 
-  console.log(title, description, fullText, status, authorId, fileKey);
-
   const fileUrl = newsItem.file.url;
 
   const form = useForm<z.infer<typeof EditNewsSchema>>({
@@ -138,8 +136,6 @@ const CreateNewsPage = () => {
 
   const NewsId = removePrefix(pathname);
 
-  console.log(NewsId);
-
   useEffect(() => {
     const fetchNewsItem = async () => {
       if (NewsId) {
@@ -157,8 +153,6 @@ const CreateNewsPage = () => {
     fetchNewsItem();
   }, [NewsId]);
 
-  console.log(newsItem);
-
   const { mutate: sendFormValues } = useMutation({
     mutationFn: async ({
       values,
@@ -166,7 +160,6 @@ const CreateNewsPage = () => {
       values: z.infer<typeof EditNewsSchema>;
     }) => {
       try {
-        console.log(values);
         const response = await fetch("/api/updateNews", {
           method: "POST",
           headers: {

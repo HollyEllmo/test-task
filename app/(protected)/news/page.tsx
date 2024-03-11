@@ -26,7 +26,7 @@ const NewsPage = () => {
     const fetchNews = async () => {
       try {
         const response = await axios.get("/api/getNews");
-        console.log(response.data);
+
         setNews(response.data.news);
       } catch (error) {
         console.error("Error receiving news:", error);
@@ -36,12 +36,9 @@ const NewsPage = () => {
     fetchNews();
   }, [revalidate]);
 
-  console.log(news);
-
   const { mutate: deleteNews } = useMutation({
     mutationFn: async ({ id }: { id: string }) => {
       try {
-        console.log(id);
         const response = await fetch("/api/deleteNews", {
           method: "POST",
           headers: {

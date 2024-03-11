@@ -72,7 +72,6 @@ const CreateNewsPage = () => {
   const { mutate: sendFormValues } = useMutation({
     mutationFn: async ({ values }: { values: z.infer<typeof NewsSchema> }) => {
       try {
-        console.log(values);
         const response = await fetch("/api/createNews", {
           method: "POST",
           headers: {
@@ -84,8 +83,6 @@ const CreateNewsPage = () => {
         const data = await response.json();
 
         router.push(`news/${data.newNews.id}`);
-
-        console.log(data.newNews.id);
 
         if (response.ok) {
           if (response.status === 200) {

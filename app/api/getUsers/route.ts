@@ -12,8 +12,6 @@ export async function GET(req: Request) {
   try {
     const users = await db.user.findMany();
 
-    console.log(users);
-
     return NextResponse.json({ users }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
