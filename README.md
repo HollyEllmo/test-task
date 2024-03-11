@@ -7,7 +7,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-All .env variables already, but you need to deploy your own PostgreSQL in Docker and put link to it in DATABASE_URL in .env file.
+All .env variables already, but you need to deploy your own PostgreSQL in Docker and put link to it in DATABASE_URL in .env file, and you'll probably have to issue the npx prisma generate command at some point.
 
 I hope you won't abuse my keys :)
 
