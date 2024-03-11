@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 
-import { UserRole } from "@prisma/client";
+// import { UserRole } from "@prisma/client";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import { getUserById } from "./data/user";
@@ -62,6 +62,8 @@ export const {
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
+
+      type UserRole = "ADMIN" | "MODERATOR" | "USER";
 
       if (token.role && session.user) {
         session.user.role = token.role as UserRole;

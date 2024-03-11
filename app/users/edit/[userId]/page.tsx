@@ -33,7 +33,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 
-import { UserRole } from "@prisma/client";
+// import { UserRole } from "@prisma/client";
 import { redirect, usePathname } from "next/navigation";
 import axios from "axios";
 
@@ -92,7 +92,7 @@ const SettingsPage = () => {
       name: "",
       email: "",
       phoneNumber: "",
-      role: UserRole.USER,
+      role: "USER",
       status: UserStatus.ACTIVE,
       isTwoFactorEnabled: false,
     },
@@ -326,11 +326,9 @@ const SettingsPage = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value={UserRole.ADMIN}>Admin</SelectItem>
-                        <SelectItem value={UserRole.USER}>User</SelectItem>
-                        <SelectItem value={UserRole.MODERATOR}>
-                          Moderator
-                        </SelectItem>
+                        <SelectItem value={"ADMIN"}>Admin</SelectItem>
+                        <SelectItem value={"USER"}>User</SelectItem>
+                        <SelectItem value={"MODERATOR"}>Moderator</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

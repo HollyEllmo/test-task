@@ -1,4 +1,4 @@
-import { UserRole } from "@prisma/client";
+// import { UserRole } from "@prisma/client";
 import { UserStatus } from "@prisma/client";
 import { NewsStatus } from "@prisma/client";
 
@@ -8,7 +8,7 @@ export const SettingsSchema = z
   .object({
     name: z.optional(z.string()),
     isTwoFactorEnabled: z.optional(z.boolean()),
-    role: z.enum([UserRole.ADMIN, UserRole.USER, UserRole.MODERATOR]),
+    role: z.enum(["ADMIN", "USER", "MODERATOR"]),
     email: z.optional(z.string().email()),
     password: z.optional(z.string().min(6)),
     newPassword: z.optional(z.string().min(6)),
@@ -43,7 +43,7 @@ export const SettingsSchema = z
 export const CreateUserSchema = z.object({
   name: z.optional(z.string()),
   isTwoFactorEnabled: z.optional(z.boolean()),
-  role: z.enum([UserRole.ADMIN, UserRole.USER, UserRole.MODERATOR]),
+  role: z.enum(["ADMIN", "USER", "MODERATOR"]),
   email: z.optional(z.string().email()),
   password: z.optional(z.string().min(6)),
   phoneNumber: z.optional(z.string().min(7)),
@@ -54,7 +54,7 @@ export const UpdateUserSchema = z.object({
   id: z.string(),
   name: z.optional(z.string()),
   isTwoFactorEnabled: z.optional(z.boolean()),
-  role: z.enum([UserRole.ADMIN, UserRole.USER, UserRole.MODERATOR]),
+  role: z.enum(["ADMIN", "USER", "MODERATOR"]),
   email: z.optional(z.string().email()),
   password: z.optional(z.string().min(6)),
   phoneNumber: z.optional(z.string().min(7)),
